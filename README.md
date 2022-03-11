@@ -1,3 +1,10 @@
+# 2022年3月11日
+
+文件需要指定输出目录到./examples内，并且拷贝libs/w64/quickjs.dll到.example目录内。
+然后可以run起来看效果。我验证了装入一个js，js内装入另一个模块，还有自定义模块apihook.h。想不到freepascal还比较有用。
+
+加了一个函数到global内
+
 # QuickJS-Pascal
 
 ## QuickJS FreePascal / Delphi Bindings sync with the latest version   [QuickJS](https://bellard.org/quickjs) Headers.

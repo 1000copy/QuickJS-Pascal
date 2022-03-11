@@ -157,13 +157,52 @@ begin
   Writeln();
   readln();
 end;
-
+procedure RunCode2();
+var
+  rt  : JSRuntime;
+  ctx : JSContext;
+  m   : JSModuleDef;
+  global : JSValue;
+  filename : PChar;
+const
+  std_hepler : PChar =
+    'log(1,2,''3'');'#10;
+begin
+  rt := JS_NewRuntime;
+  if Assigned(rt) then
+  begin
+    ctx := JS_NewContext(rt);
+    if Assigned(rt) then
+    begin
+      // ES6 Module loader.
+      JS_SetModuleLoaderFunc(rt, nil, @js_module_loader, nil);
+      // Load - console.log
+      js_std_add_helpers(ctx,argc-1,@argv[1]);
+      // load global
+      global := JS_GetGlobalObject(ctx);
+      // Define a function in the global context.
+      JS_SetPropertyStr(ctx,global,'log',JS_NewCFunction(ctx, @logme, 'log', 1));
+      eval_buf(ctx, std_hepler, strlen(std_hepler), '<global_helper>', False, JS_EVAL_TYPE_MODULE);
+      // Free global
+      JS_FreeValue(ctx, global);
+      eval_file(ctx,'hello_module.js');
+      // init event loop
+      js_std_loop(ctx);
+      js_std_free_handlers(rt);
+      // free context
+      JS_FreeContext(ctx);
+    end;
+    // free runtime
+    JS_FreeRuntime(rt);
+  end;
+  Writeln();
+  readln();
+end;
 
 
 begin
   { TODO -oColdzer0 : RawTest Bytes need to be updated }
   //RawTest; // If you unComment this comment the next line.
-  RunCode;
+  RunCode2;
 end.
-//文件需要指定输出目录到./examples内，并且拷贝libs/w64/quickjs.dll到.example目录内。然后可以run起来看效果。我验证了装入一个js，js内装入另一个模块，还有自定义模块apihook.h。想不到freepascal还比较有用。
-// 2022年3月11日
+
