@@ -140,12 +140,13 @@ begin
 
       JS_FreeValue(ctx, global);
 
-      if ParamCount >= 1 then
-      begin
-        filename := PChar(ParamStr(1));
-        eval_file(ctx,filename);
-      end;
-
+      //if ParamCount >= 1 then
+      //begin
+      //  filename := PChar(ParamStr(1));
+      //  eval_file(ctx,filename);
+      //end;
+      eval_file(ctx,'hello_module.js');
+      //eval_file(ctx,'apihook.js');
       js_std_loop(ctx);
 
       js_std_free_handlers(rt);
@@ -154,6 +155,7 @@ begin
     JS_FreeRuntime(rt);
   end;
   Writeln();
+  readln();
 end;
 
 
@@ -163,4 +165,5 @@ begin
   //RawTest; // If you unComment this comment the next line.
   RunCode;
 end.
-
+//文件需要指定输出目录到./examples内，并且拷贝libs/w64/quickjs.dll到.example目录内。然后可以run起来看效果。我验证了装入一个js，js内装入另一个模块，还有自定义模块apihook.h。想不到freepascal还比较有用。
+// 2022年3月11日
